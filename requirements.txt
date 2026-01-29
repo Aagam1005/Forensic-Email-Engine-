@@ -1,0 +1,10 @@
+flask
+flask-cors
+fpdf
+transformers
+torch
+# Optional but recommended for full features:
+dkimpy
+pyspf
+dnspython
+scapy

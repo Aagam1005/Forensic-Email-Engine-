@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Email Forensics</title>
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='main.png') }}">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <div style="margin-top:15px; font-weight:600; color:#0f172a;">Processing large file...</div>
+</div>
+
+<div id="landing-screen">
+  <div class="bg-watermark"></div>
+  <div class="landing-content">
+    <div class="landing-logo-big">
+      <img src="{{ url_for('static', filename='main.png') }}" alt="Logo">
+    </div>
+    <h1 class="landing-title">SILENTCELL</h1>
+    <div class="landing-subtitle">UNCOVER THE UNSEEN</div>
+    <button class="btn-enter" id="enterBtn">INITIALIZE ANALYSIS</button>
+  </div>
+</div>
+
+<div id="app-interface">
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+          <div class="logo" aria-hidden="true">
+              <img src="{{ url_for('static', filename='main.png') }}" alt="Logo">
+          </div>
+          <div>
+            <h1>SILENTCELL</h1>
+            <p class="lead">BYTEBREACH FORENSICS DASHBOARD</p>
+          </div>
+      </div>
+      <button class="btn alt nav" id="backBtn">Back to Home</button>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="small">Input</div>
+              <strong>Upload .eml or paste raw message</strong>
+            </div>
+            <div class="controls">
+              <label class="filebox">
+                <input id="file-eml" type="file" accept=".eml" style="display:none">
+                Upload .eml
+              </label>
+              <label class="filebox">
+                <input id="file-pcap" type="file" accept=".pcap,.pcapng" style="display:none">
+                Upload pcap
+              </label>
+              <button class="btn" id="runBtn">Analyze</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small">Raw message</div>
+            <textarea id="raw" rows="12" placeholder="Paste raw RFC822 message or upload .eml"></textarea>
+            <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+              <button class="btn alt" id="clearBtn">Clear</button>
+              <div class="small" id="nlpStatus">{{ nlp_status }}</div>
+            </div>
+            <div style="margin-top:10px" id="fileStatus" class="small"></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>Detailed Report</strong><div class="small">Full analysis output</div></div>
+            <div>
+              <button class="btn alt" id="exportBtn">Export</button>
+            </div>
+          </div>
+          <pre id="report" class="report">No analysis performed yet.</pre>
+        </div>
+      </div>
+
+      <aside>
+        <div class="panel">
+          <div class="gauge-container">
+            <div style="margin-bottom:15px; text-align:center;">
+                <div class="small">Risk Analysis</div>
+                <strong style="font-size:16px">Threat Score</strong>
+            </div>
+            <div class="gauge">
+                <div class="gauge-bg"></div>
+                <div class="gauge-mask"></div>
+                <div class="gauge-needle" id="gaugeNeedle"></div>
+                <div class="gauge-score" id="gaugeScoreText">--</div>
+            </div>
+            <div class="gauge-labels">
+                <span>SAFE</span>
+                <span style="transform:translateX(5px)">RISK</span>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px; border-top:1px solid #eee; padding-top:15px">
+            <div class="meta">
+              <div id="fromEl" class="small">From: N/A</div>
+              <div id="rpEl" class="small">Return-Path: N/A</div>
+              <div id="ipsEl" class="small">IPs: N/A</div>
+            </div>
+            <div>
+              <div id="badge" class="badge maybe">NO DATA</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small">Checks</div>
+            <div class="stat-grid">
+              <div class="stat"><div class="k">SPF</div><div id="spfVal" class="v">N/A</div></div>
+              <div class="stat"><div class="k">DKIM</div><div id="dkimVal" class="v">N/A</div></div>
+              <div class="stat"><div class="k">DMARC</div><div id="dmarcVal" class="v">N/A</div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small">NLP Analysis</div>
+            <div style="margin-top:8px"><span id="nlpVal" class="pill">NLP: not run</span></div>
+             <div class="small" style="margin-top: 6px;">Model Accuracy: {{ model_accuracy }}</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small">Recommendation</div>
+            <div style="margin-top:8px;border-radius:8px;padding:10px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid rgba(2,6,23,0.03)" id="recommend">
+              No assessment yet.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <div class="footer">Local-first • Optional model: {{ model_name }} • scapy available: {{ scapy }}</div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
